@@ -66,4 +66,5 @@ out/
 atlassian-ide-plugin.xml
 *.txt
 *.csv
+*.doc
 
