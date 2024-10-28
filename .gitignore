@@ -64,7 +64,6 @@ pip-selfcheck.json
 *.iws
 out/
 atlassian-ide-plugin.xml
-.idea/
 *.txt
 *.csv
-/ВГО/
+
