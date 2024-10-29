@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block app_content %}
     <a href="/" class="btn btn-warning home">На главную</a>
+    <div class="counter">{{new_game.counter}}</div>
     <a href="live" class="btn btn-info refresh">Создать новую жизнь</a>
 
 <table class="world">
@@ -9,6 +10,8 @@
             {% for j in range(new_game.world[i] | length) %}
             {% if new_game.world[i][j] %}
                 <td class="cell living-cell"></td>
+            {% elif new_game.old_world[i][j] and not new_game.world[i][j] %}
+            <td class="cell dead-cell"></td>
             {% else %}
                 <td class="cell "></td>
             {% endif%}
