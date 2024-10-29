@@ -1,22 +1,25 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="content">
-    {% block app_content %}
-<a href="/" class="btn btn-warning home">На главную</a>
-<a href="live" class="btn btn-info refresh">Создать новую жизнь</a>
+{% extends 'base.html' %}
+{% block app_content %}
+    <a href="/" class="btn btn-warning home">На главную</a>
+    <a href="live" class="btn btn-info refresh">Создать новую жизнь</a>
+
 <table class="world">
-    {% for i in range(len(new_game.universe)) %}
-    <tr>
-        {% for j in range(len(new_game.universe[0])) %}
-        {% if ... %}
-        <td class="cell living-cell"></td>
-        {% else %}
-        <td class="cell"></td>
-        {% endif %}
-        {% endfor %}
-    </tr>
-        {% endfor %}
-    </table>
-    {% endblock %}
-</div>
+    {% for i in range(new_game.world | length) %}
+        <tr>
+            {% for j in range(new_game.world[i] | length) %}
+            {% if new_game.world[i][j] %}
+                <td class="cell living-cell"></td>
+            {% else %}
+                <td class="cell "></td>
+            {% endif%}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+    <script>
+        setInterval(() => window.location.reload(), 1000);
+    </script>
 {% endblock %}
