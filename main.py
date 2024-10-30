@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from game_of_life import GameOfLife
+import game_of_life
 import webbrowser
 
 app = Flask(__name__)
@@ -7,14 +7,17 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    GameOfLife(25, 25)
+    game_of_life.GameOfLife(25, 25)
     return render_template("index.html")
 
 
 @app.route("/live")
 def live():
-    new_game = GameOfLife
-    new_game.form_new_generation
+    new_game = game_of_life.GameOfLife()
+    if new_game.counter:
+        new_game.form_new_generation()
+    else:
+        new_game.counter += 1
     return render_template("live.html", new_game=new_game)
 
 
