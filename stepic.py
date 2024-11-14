@@ -1,47 +1,48 @@
 ##%%
-class UserMail:
-    logins = set() # Множество для хранения уникальных логинов
-    def __init__(self, login, email):
-        self._login = None  # Временно храним логин в другом атрибуте
-        self.login = login  # Используем свойство для установки логина
-        self.__email = email
+class SparseArray:
+    def __init__(self, *args):
+        # Инициализируем массив с переданными аргументами
+        self.values = list(args)
 
-    def get_email(self):
-        return self.__email
+    def __getitem__(self, index):
+        # Если индекс больше или равен длине массива, расширяем массив
+        if index >= len(self.values):
+            self.values.extend([None] * (index + 1 - len(self.values)))
+        return self.values[index]
 
-    def set_email(self, value):
-        # Проверяем корректность email
-        if isinstance(value, str) and value.count('@') == 1 and '.' in value[(value.find('@') + 1):]:
-            self.__email = value
-        else:
-            print(f'ErrorMail: {value}')
+    def __setitem__(self, index, value):
+        # Если индекс больше или равен длине массива, расширяем массив
+        if index >= len(self.values):
+            self.values.extend([None] * (index + 1 - len(self.values)))
+        self.values[index] = value
 
-    email = property(fget=get_email, fset=set_email)
+    def __delitem__(self, index):
+        # Если индекс в пределах текущего диапазона массива, устанавливаем значение по индексу на None
+        if index < len(self.values):
+            self.values[index] = None
+
+    def __len__(self):
+        # Возвращаем длину массива (включая разреженные элементы)
+        return len(self.values)
 
     @property
-    def login(self):
-        return self._login
+    def values(self):
+        # Возвращаем кортеж значений массива
+        return tuple(self._values)
 
-    @login.setter
-    def login(self, value):
-        if not isinstance(value, str):
-            raise TypeError(f'{value} не является строкой')
-        
-        if value in self.logins:
-            raise ValueError(f'Логин {value} уже имеется в системе')
-        
-        self.logins.add(value)
-        self._login = value
+    @values.setter
+    def values(self, value):
+        # Устанавливаем значения массива
+        self._values = list(value)
 
-jim = UserMail("aka47", 'hello@com.org')
-print(isinstance(type(jim).login, property))
-print(f'Jim login is {jim.login}')
-try:
-    bim = UserMail("aka47", 'world@com.org')
-except ValueError as e:
-    print(e)
-jim.login = 'aka48'
-print(f'Jim login is {jim.login}')
-bim = UserMail("aka47", 'world@com.org')
-print(f'Bim login is {bim.login}')
-
+array = SparseArray(1, 2, 3)
+print(array.values)
+print(array[7])
+print(array.values)
+array[6] = 100
+print(array.values)
+array[10] = 200
+print(array.values)
+del array[1]
+print(array.values)
+print(len(array))
