@@ -7,13 +7,13 @@ class SparseArray:
     def __getitem__(self, index):
         # Если индекс больше или равен длине массива, расширяем массив
         if index >= len(self.values):
-            self.values.extend([None] * (index + 1 - len(self.values)))
+            list(self.values).extend([None] * (index + 1 - len(self.values)))
         return self.values[index]
 
     def __setitem__(self, index, value):
         # Если индекс больше или равен длине массива, расширяем массив
         if index >= len(self.values):
-            self.values.extend([None] * (index + 1 - len(self.values)))
+            list(self.values).extend([None] * (index + 1 - len(self.values)))
         self.values[index] = value
 
     def __delitem__(self, index):
@@ -34,6 +34,7 @@ class SparseArray:
     def values(self, value):
         # Устанавливаем значения массива
         self._values = list(value)
+
 
 array = SparseArray(1, 2, 3)
 print(array.values)
