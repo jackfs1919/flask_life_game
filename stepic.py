@@ -1,21 +1,17 @@
 ##%%
-def make_censored(x: str, y: list):
+def remove_first_level():
     '''
-    заменяет каждое вхождение указанных слов в предложении на
-      последовательность $#%! и возвращает полученную строку
-      Словом считается любая непрерывная последовательность символов, 
-      включая любые спецсимволы (без пробелов)
+    принимать на вход дерево и возвращать новое дерево, элементами которого являются потомки вложенных узлов
+    Подключенный в модуле пакет itertools можно использовать, но это необязательно
+    [
+  3, # Лист
+  [5, 3], # Узел
+  [[2]] # Узел
+]
     '''
-    fuuuu = '$#%!'
-    te = list(x.split(" "))
 
 
-sentence = 'When you play the game of thrones, you win or you die'
-result = make_censored(sentence, ['die', 'play'])
-print(result)
-# When you $#%! the game of thrones, you win or you $#%!
-
-sentence2 = 'chicken chicken? chicken! chicken'
-result2 = make_censored(sentence2, ['?', 'chicken'])
-print(result2)
-# '$#%! chicken? chicken! $#%!';
+tree1 = [[5], 1, [3, 4]]
+remove_first_level(tree1)  # [5, 3, 4]
+tree2 = [1, 2, [3, 5], [[4, 3], 2]]
+remove_first_level(tree2)  # [3, 5, [4, 3], 2]
