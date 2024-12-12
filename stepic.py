@@ -13,5 +13,5 @@ def remove_first_level():
 
 tree1 = [[5], 1, [3, 4]]
 remove_first_level(tree1)  # [5, 3, 4]
-tree2 = [1, 2, [3, 5], [[4, 3], 2]]
+tree2 = [1, 2, [3, 5], [[4, 3], 2]] 
 remove_first_level(tree2)  # [3, 5, [4, 3], 2]
