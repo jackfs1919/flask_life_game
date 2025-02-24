@@ -1,41 +1,34 @@
 ##%%
 from time import sleep
-from playwright.sync_api import Playwright, sync_playwright
-URL = "https://parsinger.ru/selenium/3/3.3.3/index.html"
+import os
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
+URL = "https://parsinger.ru/selenium/7/7.5/index.html"
+driver = webdriver.Chrome()
+driver.get(URL)
+sleep(5)
+total_likes = 0
+actions = ActionChains(driver)
+div = driver.find_element('id', 'container')
+for _ in range(30):
+    actions.pause(1) \
+        .key_down(Keys.END, div) \
+        .perform()
+sleep(3)
+cards = driver.find_elements('class name', 'card')
+actions.pause(1) \
+    .key_down(Keys.HOME, div) \
+    .perform()
+sleep(3)
+for card in cards:
+    card.find_element('class name', 'like-btn').click()
+    sleep(1)
+    total_likes += int(card.find_element('class name', 'big-number').text)
+    actions.key_down(Keys.ARROW_DOWN, div)
 
-def run(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
-    context = browser.new_context()
-    page = context.new_page()
-    
-    def req_resp():
-        '''
-        вывод на экран результатаов GET и POST запросов к page
-        вызывается после page = context.new_page()
-        '''
-        page.on("request", lambda request: print(">>", request.method, request.url))
-        page.on("response", lambda response: print("<<", response.status, response.url))
+print(total_likes)
 
-    # req_resp()
-    page.goto(URL)
-    # page.locator("#secret-key-button").click()
-    par = page.locator("a").all()
-    colvo = 0
-    for i in par:
-        attr = i.get_attribute("stormtrooper")
-        if attr.isdigit():
-            colvo += int(attr)
-    page.locator("#inputNumber").click()
-    page.locator("#inputNumber").type(str(colvo))
-    page.locator("#feedbackMessage").click()
-    # par.locator(".child_class").first.click()
-    print(page.locator("#feedbackMessage").text_content())
-    sleep(10)
-    # context.close()
-    browser.close()
-    exit()
-
-
-with sync_playwright() as playwright:
-    run(playwright)
+driver.quit()
+os.system("taskkill /im chrome.exe /f")
