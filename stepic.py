@@ -1,34 +1,24 @@
 ##%%
 from time import sleep
 import os
+import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
-URL = "https://parsinger.ru/selenium/7/7.5/index.html"
-driver = webdriver.Chrome()
-driver.get(URL)
-sleep(5)
+URL = "http://parsinger.ru/selenium/9/9.3.1/index.html"
+browser = webdriver.Chrome()
+browser.get(URL)
+# iframe = browser.find_element('tag name', 'iframe')
+# browser.switch_to.frame(iframe)
+# text = browser.page_source
+# words = ''.join(re.findall(r'\*(.*?)\*', text))
+# print(words)
+sleep(200)
 total_likes = 0
-actions = ActionChains(driver)
-div = driver.find_element('id', 'container')
-for _ in range(30):
-    actions.pause(1) \
-        .key_down(Keys.END, div) \
-        .perform()
-sleep(3)
-cards = driver.find_elements('class name', 'card')
-actions.pause(1) \
-    .key_down(Keys.HOME, div) \
-    .perform()
-sleep(3)
-for card in cards:
-    card.find_element('class name', 'like-btn').click()
-    sleep(1)
-    total_likes += int(card.find_element('class name', 'big-number').text)
-    actions.key_down(Keys.ARROW_DOWN, div)
+
 
 print(total_likes)
 
-driver.quit()
+browser.quit()
 os.system("taskkill /im chrome.exe /f")
