@@ -2,7 +2,7 @@
 from termcolor import colored
 
 # список цветов (последовательность будет циклически повторяться)
-colors = ['red', 'green', 'blue']
+colors = ['black', 'green', 'blue']
 
 lines = [
     "Первая строка текста",
@@ -14,4 +14,4 @@ lines = [
 
 for i, line in enumerate(lines):
     color = colors[i % len(colors)]
-    print(colored(line, color))
+    print(colored(line, color, "on_yellow"))
