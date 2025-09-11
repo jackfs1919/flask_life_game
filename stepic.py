@@ -1,17 +1,10 @@
 #№%%
-from termcolor import colored
+import logging
 
-# список цветов (последовательность будет циклически повторяться)
-colors = ['black', 'green', 'blue']
-
-lines = [
-    "Первая строка текста",
-    "Вторая строка текста",
-    "Третья строка текста",
-    "Четвёртая строка текста",
-    "Пятая строка текста",
-]
-
-for i, line in enumerate(lines):
-    color = colors[i % len(colors)]
-    print(colored(line, color, "on_yellow"))
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+# print(logger)
+logger.info('привет')
+#   
+# logging.info('Это сообщение уровня INFO')  
