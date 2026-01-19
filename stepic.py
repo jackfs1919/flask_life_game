@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+import os
 
 pref = {
     "download.default_directory": os.getcwd(),
@@ -38,19 +39,19 @@ options.add_argument("--disable-crash-reporter")
 # options.add_argument("--incognito")
 options.add_argument("--ignore-certificate-errors")
 options.add_experimental_option("prefs", pref)
+url = "https://parsinger.ru/2.5/sites_selectors/index.html"
+teg = "p"
+symbol = "@"
 
-# Запускаем браузер
 with webdriver.Chrome(options=options) as driver:
-    # Переходим на веб-сайт
-    driver.get('https://parsinger.ru/2.5/sites_selectors/index.html')
-    
-    # Ищем элемент <p> с текстом, содержащим символ копирайта
-    element = driver.find_element(By.CSS_SELECTOR, 'p:-webkit-matches(:contains("©"))')
-    
-    if element:
-        # Получаем следующий элемент (предполагается, что именно там хранится секретный код)
-        secret_element = element.find_element(By.XPATH, './following-sibling::*').text.strip()
+
+    driver.get(url)
+    element = driver.find_element(By.CSS_SELECTOR, "div.copyright:nth-child(0)")
+    print(element.text)
+    # if element:
+    #     # Получаем следующий элемент (предполагается, что именно там хранится секретный код)
+    #     secret_element = element.find_element(By.XPATH, './following-sibling::*').text.strip()
         
-        print(f'Код: {secret_element}')
-    else:
-        print('Элемент не найден.')
+    #     print(f'Код: {secret_element}')
+    # else:
+    #     print('Элемент не найден.')
