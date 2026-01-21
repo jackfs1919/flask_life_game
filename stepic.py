@@ -40,14 +40,13 @@ options.add_argument("--disable-crash-reporter")
 options.add_argument("--ignore-certificate-errors")
 options.add_experimental_option("prefs", pref)
 url = "https://parsinger.ru/2.5/sites_selectors/index.html"
-teg = "p"
 symbol = "©"
 
 with webdriver.Chrome(options=options) as driver:
 
     driver.get(url)
-    element = driver.find_element(By.CSS_SELECTOR, "div.copyright:nth-child(0)")
-    print(element.text)
+    element = driver.find_element(By.CSS_SELECTOR, "div.copyright>p")
+    print(element.tag_name)
     # if element:
     #     # Получаем следующий элемент (предполагается, что именно там хранится секретный код)
     #     secret_element = element.find_element(By.XPATH, './following-sibling::*').text.strip()
