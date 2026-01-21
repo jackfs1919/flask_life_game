@@ -41,7 +41,7 @@ options.add_argument("--ignore-certificate-errors")
 options.add_experimental_option("prefs", pref)
 url = "https://parsinger.ru/2.5/sites_selectors/index.html"
 teg = "p"
-symbol = "@"
+symbol = "©"
 
 with webdriver.Chrome(options=options) as driver:
 
