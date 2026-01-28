@@ -9,14 +9,14 @@ class TypeValidation(ABC):
     def set_name(self, attribute_name):
         self.attribute_name = attribute_name
     
-    def set(self, instance, value):
+    def __set__(self, instance, value):
         if not isinstance(value, self.expected_type):
             raise ValueError(
                 f"В атрибут {self.attribute_name} можно сохранять только тип {self.expected_type.__name__}"
             )
         instance.__dict__[self.attribute_name] = value
 
-    def get(self, instance):
+    def __get__(self, instance):
         if instance is None:
             return self
         return instance.__dict__.get(self.attribute_name, None)
