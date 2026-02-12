@@ -1,39 +1,52 @@
-from abc import ABC
+import requests
+from datetime import datetime
 
 
-class TypeValidation(ABC):
-    def __init__(self, expected_type):
-        self.expected_type = expected_type
+def get_wind_forecast(lat, lon):
+    # API параметры: текущий ветер и почасовой прогноз
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "current": ["wind_speed_10m", "wind_direction_10m"],
+        "hourly": ["wind_speed_10m", "wind_direction_10m"],
+        "wind_speed_unit": "ms",  # Получаем сразу в м/с
+        "forecast_days": 3,
+    }
 
-    def __set_name__(self, owner_class, attribute_name):
-        self.attribute_name = attribute_name
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
 
-    def __set__(self, instance, value):
-        if not isinstance(value, self.expected_type):
-            raise ValueError(
-                f"В атрибут '{self.attribute_name}' можно сохранять только значения типа {self.expected_type.__name__}"
-            )
-        instance.__dict__[self.attribute_name] = value
+        # Функция для перевода градусов в румбы
+        def get_direction(deg):
+            dirs = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
+            return dirs[int((deg + 22.5) // 45) % 8]
 
-    def __get__(self, instance, owner_class):
-        if instance is None:
-            return self
-        return instance.__dict__.get(self.attribute_name, None)
+        # 1. Текущие данные
+        curr_speed = data["current"]["wind_speed_10m"]
+        curr_dir = get_direction(data["current"]["wind_direction_10m"])
+
+        # 2. Прогноз на 3 дня (вычисляем среднее или берем пиковые значения)
+        # Для краткости выведем средние значения за весь период прогноза
+        avg_speed = sum(data["hourly"]["wind_speed_10m"]) / len(
+            data["hourly"]["wind_speed_10m"]
+        )
+
+        # Находим преобладающее направление (самое частое в прогнозе)
+        forecast_dirs = [get_direction(d) for d in data["hourly"]["wind_direction_10m"]]
+        most_common_dir = max(set(forecast_dirs), key=forecast_dirs.count)
+
+        return (
+            f"скорость в м/с {curr_speed}, {curr_dir} | "
+            f"на ближайшие трое суток прогнозируемые скорость в м/с {round(avg_speed, 1)}, {most_common_dir}"
+        )
+
+    except Exception as e:
+        return f"Ошибка получения данных: {e}"
 
 
-class Person:
-    age = TypeValidation(int)
-    height = TypeValidation(float)
-    name = TypeValidation(str)
-    hobbies = TypeValidation(list)
+# Пример вызова для Москвы (55.75, 37.61)
+print(get_wind_forecast(68.97, 33.09))
 
-
-mike = Person()
-try:
-    mike.name = 100
-except ValueError as e:
-    print(e)
-try:
-    mike.height = (1, 2, 3)
-except ValueError as e:
-    print(e)
