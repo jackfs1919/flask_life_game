@@ -10,12 +10,18 @@ async def worker(worker_id, semaphore):
         preparing_count += 1
         max_preparing = max(max_preparing, preparing_count)
     await asyncio.sleep(0.1)
+    async with lock:
+        preparing_count -= 1
+        max_preparing = max(max_preparing, preparing_count)
     async with semaphore:
         # Работа
         async with lock:
             working_count += 1
             max_working = max(max_working, working_count)
         await asyncio.sleep(0.1)
+        async with lock:
+            working_count -= 1
+            max_working = max(max_working, working_count)
 
 async def main():
     semaphore = asyncio.Semaphore(2)
