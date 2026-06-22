@@ -1,6 +1,7 @@
-good = {"foo" : "good", "bar": "good1"}
-bad = {"foo": "bad", "bar": "bad1"}
-PR = good
-print(PR["foo"], PR["bar"])  # good good1
-PR = bad
-print(PR["foo"], PR["bar"])  # bad bad1
+# s = input().strip()
+s = ['A', 'O', 'O', 'O', 'Z', 'A', 'O', 'Z']
+a = [i for i, c in enumerate(s) if c == 'A']
+z = [i for i, c in enumerate(s) if c == 'Z']
+distances = [abs(i - j) for i in a for j in z]
+print(min(distances) if distances else -1)
+print(a, z)
